@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#122238">
+  <title>Matériau ID — Identificateur de masse volumique</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Matériau ID, accueil">
+      <span class="brand-mark">M<span>ρ</span></span>
+      <span><strong>Matériau ID</strong><small>Laboratoire de matière</small></span>
+    </a>
+    <span class="top-note"><span class="status-dot"></span> Base de référence intégrée</span>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">OUTIL D’IDENTIFICATION</p>
+        <h1>Quel est ce <span>matériau&nbsp;?</span></h1>
+        <p class="intro">Comparez une masse volumique mesurée à une base de référence pour trouver les substances les plus proches.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orb orb-one"></div><div class="orb orb-two"></div>
+        <div class="cube"><span>ρ</span></div>
+        <div class="art-line line-one"></div><div class="art-line line-two"></div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <form id="search-form" class="search-card">
+        <div class="section-heading">
+          <div><p class="eyebrow">01 / VOTRE MESURE</p><h2>Calculer ou saisir une masse volumique</h2></div>
+          <span class="pill">Recherche instantanée</span>
+        </div>
+
+        <div class="mode-switch" role="group" aria-label="Mode de calcul">
+          <button type="button" class="mode-button active" data-mode="density">J’ai déjà la masse volumique</button>
+          <button type="button" class="mode-button" data-mode="calculate">Calculer avec masse et volume</button>
+        </div>
+
+        <div id="density-mode">
+          <label for="density">Masse volumique mesurée</label>
+          <div class="input-row">
+            <input id="density" name="density" type="number" min="0" step="any" placeholder="Ex. 7850">
+            <select id="unit" name="unit" aria-label="Unité de la masse volumique">
+              <option value="kgm3">kg/m³</option>
+              <option value="gcm3">g/cm³</option>
+            </select>
+            <button type="submit"><span>Identifier</span><span aria-hidden="true">↗</span></button>
+          </div>
+        </div>
+
+        <div id="calculate-mode" hidden>
+          <div class="measure-grid">
+            <div class="measure-field">
+              <label for="mass">Masse</label>
+              <div class="measure-input">
+                <input id="mass" type="number" min="0" step="any" placeholder="Ex. 250" />
+                <select id="mass-unit" aria-label="Unité de masse">
+                  <option value="g">g</option><option value="kg">kg</option><option value="mg">mg</option>
+                </select>
+              </div>
+            </div>
+            <div class="measure-field">
+              <label for="volume">Volume</label>
+              <div class="measure-input">
+                <input id="volume" type="number" min="0" step="any" placeholder="Ex. 100" />
+                <select id="volume-unit" aria-label="Unité de volume">
+                  <option value="cm3">cm³</option><option value="m3">m³</option><option value="mm3">mm³</option><option value="l">L</option><option value="ml">mL</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="formula-note">Masse volumique = masse ÷ volume</div>
+          <button type="button" id="calculate-button" class="calculate-button">Calculer et identifier <span aria-hidden="true">↗</span></button>
+          <p id="calculation-error" class="calculation-error" hidden></p>
+          <div id="calculation-result" class="calculation-result" hidden></div>
+        </div>
+
+        <div class="controls-row">
+          <div class="tolerance-control">
+            <label for="tolerance">Tolérance de comparaison</label>
+            <select id="tolerance">
+              <option value="1">± 1 % — très proche</option>
+              <option value="3" selected>± 3 % — équilibrée</option>
+              <option value="5">± 5 % — souple</option>
+              <option value="10">± 10 % — large</option>
+            </select>
+          </div>
+          <div class="hint"><span class="hint-icon">i</span><span>Les résultats sont des pistes d’identification, pas une certification du matériau.</span></div>
+        </div>
+        <div class="quick-values">
+          <span>Essayer :</span>
+          <button type="button" class="quick-chip" data-value="1000">Eau · 1 000</button>
+          <button type="button" class="quick-chip" data-value="2700">Aluminium · 2 700</button>
+          <button type="button" class="quick-chip" data-value="7850">Acier · 7 850</button>
+        </div>
+      </form>
+
+      <section class="results-panel" aria-live="polite">
+        <div class="results-head">
+          <div><p class="eyebrow">02 / ANALYSE</p><h2 id="results-title">En attente de votre mesure</h2></div>
+          <span id="result-count" class="count">— résultat</span>
+        </div>
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon">ρ</div>
+          <h3>Votre analyse commence ici</h3>
+          <p>Saisissez une valeur en kg/m³ ou en g/cm³, puis lancez l’identification.</p>
+          <div class="mini-scale"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div id="results" class="results-list"></div>
+      </section>
+    </section>
+
+    <section class="database-section">
+      <div class="database-heading">
+        <div><p class="eyebrow">03 / EXPLORER LA BASE</p><h2>Référentiel des substances</h2><p class="subtext">Parcourez les valeurs intégrées et filtrez par famille.</p></div>
+        <div class="database-tools">
+          <input id="db-search" type="search" placeholder="Rechercher une substance…" aria-label="Rechercher dans la base">
+          <select id="category-filter" aria-label="Filtrer par famille"><option value="all">Toutes les familles</option></select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Substance</th><th>Famille</th><th>Masse volumique</th><th>Unité</th></tr></thead>
+          <tbody id="database-body"></tbody>
+        </table>
+      </div>
+      <div class="table-footer"><span id="database-count">Chargement de la base…</span><span>Valeurs de référence à 20 °C sauf indication contraire.</span></div>
+    </section>
+
+    <section class="method-card">
+      <div class="method-icon">ƒ</div>
+      <div><h3>Comment lire les résultats&nbsp;?</h3><p>Une valeur unique ou une plage peut correspondre à plusieurs matériaux. La température, la porosité, les alliages et les conditions de mesure influencent le résultat. Pour confirmer l’identification, combinez la masse volumique avec d’autres propriétés physiques.</p></div>
+    </section>
+  </main>
+
+  <footer><span>MATÉRIAU ID <span class="footer-dot">•</span> Outil de comparaison</span><span>Base locale · Aucun envoi de données</span></footer>
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
